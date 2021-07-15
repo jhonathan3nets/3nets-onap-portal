@@ -26,7 +26,7 @@ the application welcome.htm page will display showing the application frontend i
 However, if a cookie is not found, the code will look for the redirect URL listed in the
 WEB-INFO/classes/portal.properties file.
 
-Assuming the ecomp_redirect_url = http://portal.api.snap-3nets.eastus.cloudapp.azure.com:8989/ONAPPORTAL/login.htm
+Assuming the ecomp_redirect_url = http://portal.api.snap3nets.eastus.cloudapp.azure.com:8989/ONAPPORTAL/login.htm
 for Amsterdam release, then, the user will be redirected to the ONAP Portal login page to log in.
 
 If the user login succeeds, the Portal login page will redirect the user back to the Application
@@ -35,7 +35,7 @@ welcome page.
 This should enable the application to  use the Portal’s Single Signon.
 
 Note that the ONAP Portal and its on-boarded application must be on the same domain
-(e.g. *.snap-3nets.eastus.cloudapp.azure.com) to take advantage of the Single Signon.
+(e.g. *.snap3nets.eastus.cloudapp.azure.com) to take advantage of the Single Signon.
 
 Otherwise, if the application is hosted in a different domain, its code will not be able to read ONAP
 Portal session cookies.

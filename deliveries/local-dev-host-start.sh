@@ -44,7 +44,7 @@ mkdir -p $LOGS_DIR
 
 # Make inter-app communication work in dev3
 export EXTRA_HOST_IP=localhost
-export EXTRA_HOST_NAME="portal.api.snap-3nets.eastus.cloudapp.azure.com"
+export EXTRA_HOST_NAME="portal.api.snap3nets.eastus.cloudapp.azure.com"
 
 # (re)start containers
 docker-compose down
