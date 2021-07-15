@@ -33,7 +33,7 @@
  *
  * ============LICENSE_END============================================
  *
- * 
+ *
  */
 'use strict';
 (function () {
@@ -58,7 +58,7 @@
             $scope.menuItems = [];
             $scope.activeClickSubMenu = {
                 x: ''
-            }; 
+            };
             $scope.activeClickMenu = {
                 x: ''
             };
@@ -66,13 +66,13 @@
             $scope.notificationCount= notificationService.notificationCount;
             this.isLoading = true;
             this.ECOMP_URL_REGEX = ECOMP_URL_REGEX;
-            
+
             var unflatten = function( array, parent, tree ){
-            
+
                 tree = typeof tree !== 'undefined' ? tree : [];
                 parent = typeof parent !== 'undefined' ? parent : { menuId: null };
                 var children = _.filter( array, function(child){ return child.parentMenuId == parent.menuId; });
-                
+
                 if( !_.isEmpty( children )  ){
                   if( parent.menuId === null ){
                     tree = children;
@@ -81,10 +81,10 @@
                   }
                   _.each( children, function( child ){ unflatten( array, child ) } );
                 }
-            
+
                 return tree;
             }
-            
+
             userProfileService.getFunctionalMenuStaticInfo()
             .then(res=> {
             	if(res==null || res.firstName==null || res.firstName=='' || res.lastName==null || res.lastName=='' ){
@@ -92,13 +92,13 @@
             		userProfileService.getUserProfile()
                     .then(profile=> {
                         this.firstName = profile.firstName;
-                        this.lastName = profile.lastName;                     
+                        this.lastName = profile.lastName;
                     }).catch(err=> {
                         $log.error('Header Controller:: getUserProfile() failed: ' + err);
                     });
             	} else {
             		this.firstName = res.firstName;
-            		this.lastName = res.lastName;           	   	  	  
+            		this.lastName = res.lastName;
             	}
 
             	menusService.GetFunctionalMenuForUser()
@@ -107,12 +107,12 @@
             		$scope.megaMenuDataObject = $scope.menuItems;
             	}).catch(err=> {
             		$log.error('HeaderCtrl::GetFunctionalMenuForUser: HeaderCtrl json returned: ' + err);
-            	});      
-            	
+            	});
+
             }).catch(err=> {
             	$log.error('HeaderCtrl::getFunctionalMenuStaticInfo failed: ' + err);
             });
-            
+
           //store audit log
             $scope.auditLog = function(app,type) {
             	var comment = 'type: '+type+ ',title: '+app.text+",url: "+app.url;
@@ -145,10 +145,10 @@
                 }
                 $scope.hideMenus = true;
             }
-            
-            
-            
-            $scope.submenuLevelAction = function(index, column) {           
+
+
+
+            $scope.submenuLevelAction = function(index, column) {
                 if (index=='Favorites' && $scope.favoriteItemsCount != 0) {
                     $scope.favoritesWindow = true;
                     $scope.showFavorites = true;
@@ -165,12 +165,12 @@
                     $scope.emptyFavorites = false;
                 }
             };
-            
+
             $scope.hideFavoritesWindow = function() {
                 $scope.showFavorites = false;
                 $scope.emptyFavorites = false;
             }
-            
+
             $scope.isUrlFavorite = function (menuId) {
                 var jsonMenu =  JSON.stringify($scope.favoritesMenuItems);
                 var isMenuFavorite =  jsonMenu.indexOf('menuId\":' + menuId);
@@ -180,19 +180,19 @@
                     return true;
                 }
             }
-            
+
             /*Getting Ecomp portal Title*/
 
             let getEcompPortalTitle  = () => {
             	menusService.getEcompPortalTitle()
             	.then(title=> {
-            		$scope.ecompTitle = title.response;
+            		$scope.ecompTitle = "3nets ONAP Portal";
             	}).catch(err=> {
             		$log.error('HeaderCtrl.getEcompPortalTitle:: Error retrieving ECMOP portal title: ' + err);
             	});
             }
             getEcompPortalTitle();
-            
+
             let generateFavoriteItems  = () => {
                 menusService.getFavoriteItems()
                     .then(favorites=> {
@@ -241,10 +241,10 @@
                 	$cookies.putObject('addTab', tabContent );
                 }
             };
-            
+
             $scope.editProfile = () => {
                 let data = null;
-               
+
                 ngDialog.open({
                     templateUrl: 'app/views/header/profile-edit-dialogs/profile-edit.modal.html',
                     controller: 'EditProfileModalCtrl',
@@ -262,13 +262,13 @@
         constructor($log, $scope, $cookies, $timeout, userProfileService, sessionService) {
             $scope.firstName="";
             $scope.lastName="";
-            $scope.displayUserAppRoles=false; 
+            $scope.displayUserAppRoles=false;
             $scope.allAppsLogout = function(){
-            	
+
             	var cookieTabs = $cookies.getObject('visInVisCookieTabs');
              	if(cookieTabs!=null){
              		for(var t in cookieTabs){
-             		
+
              			var url = cookieTabs[t].content;
              			if(url != "") {
              				sessionService.logout(url);
@@ -280,8 +280,8 @@
              		window.location = "logout.htm";
              	}, 2000);
             }
-            
-            
+
+
             try {
             	userProfileService.getFunctionalMenuStaticInfo()
                 .then(res=> {
@@ -296,37 +296,37 @@
             } catch (err) {
                 $log.error('HeaderCtrl::LoginSnippetCtrl caught exception: ' + err);
             }
-            
+
             $scope.getUserApplicationRoles= function(){
           	  $scope.userapproles = [];
           	  if($scope.displayUserAppRoles)
 	         		$scope.displayUserAppRoles = false;
 	         		 else
 	         			$scope.displayUserAppRoles = true;
-          	  
+
         	        userProfileService.getUserAppRoles($scope.loginSnippetUserid)
         	          .then(res=>{
-        			
-       		 for(var i=0;i<res.length;i++){              			
+
+       		 for(var i=0;i<res.length;i++){
 	            	var userapprole ={
 	            		App:res[i].appName,
-	            		Roles:res[i].roleNames,	
-	            	};	            	
-	            	$scope.userapproles.push(userapprole); 
+	            		Roles:res[i].roleNames,
+	            	};
+	            	$scope.userapproles.push(userapprole);
        		 }
-       		 
+
         	});
-        	
+
           }
-        }        
+        }
     }
     class NotificationCtrl{
     	constructor($log, $scope, $cookies, $timeout, sessionService,notificationService,$interval,ngDialog,$modal) {
-    		 $scope.notifications=[];   
+    		 $scope.notifications=[];
     		 var intervalPromise = null;
              $scope.notificationCount= notificationService.notificationCount;
-             
-             $scope.getNotification = function(){            	 
+
+             $scope.getNotification = function(){
             	 notificationService.getNotification()
                  .then(res=> {
                 	notificationService.decrementRefreshCount();
@@ -342,7 +342,7 @@
                  		$scope.notifications = [];
                  		notificationService.setNotificationCount(res.data.response.length);
                  		for(var i=0;i<res.data.response.length;i++){
-                 			var data = res.data.response[i];                			
+                 			var data = res.data.response[i];
 			            	var notification ={
 			            		id:data.notificationId,
 			            		msgHeader:data.msgHeader,
@@ -352,14 +352,14 @@
 			            		priority:data.priority,
 			            		notificationHyperlink:data.notificationHyperlink
 			            	};
-			            	$scope.notifications.push(notification);       
-			             }  
-                 	}   	
+			            	$scope.notifications.push(notification);
+			             }
+                 	}
                  }).catch(err=> {
                  	$log.error('NotificationCtrl::getNotification: caught exception: ' + err);
                  	if (intervalPromise != null)
                  		$interval.cancel(intervalPromise);
-                 });      
+                 });
              }
              $scope.getNotification();
              function updateNotifications() {
@@ -367,7 +367,7 @@
              }
              $scope.start = function(rate) {
  				// stops any running interval to avoid two intervals running at the same time
- 				$scope.stop(); 	
+ 				$scope.stop();
  				// store the interval promise
  				intervalPromise = $interval(updateNotifications, rate);
  			 };
@@ -375,7 +375,7 @@
  			 $scope.stop = function() {
  				$interval.cancel(intervalPromise);
  			 };
- 			 
+
  			 $scope.showDetailedJsonMessage=function (selectedAdminNotification) {
         		 notificationService.getMessageRecipients(selectedAdminNotification.id).then(res =>{
                      $scope.messageRecipients = res;
@@ -383,26 +383,26 @@
 				 var modalInstance = $modal.open({
 	                    templateUrl: 'app/views/user-notifications-admin/user.notifications.json.details.modal.page.html',
 	                    controller: 'userNotificationCtrl',
-	                    sizeClass: 'modal-large', 
+	                    sizeClass: 'modal-large',
 	                    resolve: {
 	    					items: function () {
 	    						var items = {
 	  				    			   title:    '',
 	 	                       		    selectedAdminNotification:selectedAdminNotification,messageObject:messageObject,messageRecipients:$scope.messageRecipients
-	  		                       		
+
 	  		                           	};
 	  				          return items;
 	    			        	}
 	    		        }
 	                })
-		     
- 	 
+
+
    	 }).catch(err => {
             $log.error('userNotificationsCtrl:getMessageRecipients:: error ', err);
             $scope.isLoadingTable = false;
         });
         	 };
- 			 
+
  			notificationService.getNotificationRate().then(res=> {
             	if (res == null || res.response == null) {
             		$log.error('NotificationCtrl: failed to notification update rate or duration, check system.properties file.');
@@ -414,12 +414,12 @@
            			if (rate != NaN && duration != NaN) {
 						$scope.updateRate=rate;
 						$scope.start($scope.updateRate);
-           			}            			
+           			}
             	}
             }).catch(err=> {
             	$log.error('NotificationCtrl: getNotificationRate() failed: ' + err);
             });
-             
+
              $scope.deleteNotification = function(index){
             	 if ($scope.notifications[index].id == null || $scope.notifications[index].id == '') {
              		$log.error('NotificationCtrl: failed to delete Notification.');
@@ -427,11 +427,11 @@
             	 }
             	 notificationService.setNotificationRead($scope.notifications[index].id);
             	 $scope.notifications.splice(index,1);
-            	 notificationService.setNotificationCount($scope.notifications.length);     	 
+            	 notificationService.setNotificationCount($scope.notifications.length);
              }
     	}
     }
-    
+
     NotificationCtrl.$inject = ['$log', '$scope', '$cookies', '$timeout', 'sessionService','notificationService','$interval','ngDialog','$modal'];
     LoginSnippetCtrl.$inject = ['$log', '$scope', '$cookies', '$timeout','userProfileService', 'sessionService'];
     HeaderCtrl.$inject = ['$log', '$window', 'userProfileService', 'menusService', '$scope', 'ECOMP_URL_REGEX','$cookies','$state','auditLogService','notificationService','ngDialog','$modal'];
